@@ -1,0 +1,73 @@
+.TH CRABWALLD 8 "September 2026" "crabwall 1.0.0" "System Administration"
+.SH NAME
+crabwalld \- per-app firewall daemon for Linux
+.SH SYNOPSIS
+.B crabwalld
+.SH DESCRIPTION
+.B crabwalld
+watches outbound connections and enforces per-application firewall rules.
+With privileges it steers TCP/UDP output into an NFQUEUE and holds each
+new connection's first packet until the user answers (timeout denies).
+Without privileges it falls back to nftables set enforcement and logs
+decisions. Unknown connections are prompted through
+.BR crabwall (1);
+nothing unmatched is ever silently allowed under the default policy.
+.PP
+Sources of attribution, in order: eBPF connect feed (instant pid),
+5-tuple correlator, on-demand /proc socket scan,
+.B NFQA_UID
+from queued packets, passive DNS/SNI sniffer, reverse DNS (opt-in).
+.SH ENVIRONMENT
+.TP
+.B CRABWALL_DEFAULT
+Default policy for unmatched traffic:
+.B ask
+(default),
+.B allow
+or
+.B deny .
+.TP
+.B CRABWALL_PTR=1
+Enable background reverse-DNS warming of the domain cache.
+.TP
+.B CRABWALL_LEARN_SECS=N
+Learn mode: allow unknown traffic for N seconds and append suggestions
+to
+.I rules.suggested.toml
+for review.
+.TP
+.B CRABWALL_SOCK , CRABWALL_RULES , CRABWALL_DB , CRABWALL_EBPF_OBJ
+Override the socket, rules file, log database and eBPF object paths.
+.SH FILES
+.TP
+.I /run/crabwall.sock
+Control socket (root service).
+.TP
+.I ~/.config/crabwall/rules.toml
+Rules. Format:
+.RS
+.nf
+[[rule]]
+app = "firefox"              # basename or full /usr/bin/... path
+domain_suffix = "google.com" # optional suffix match
+ports = [80, 443]            # optional, empty = all
+container = "abc123def456"   # optional Docker id
+sandbox = "org.foo.Bar"      # optional Flatpak id / snap name
+action = "deny"              # allow | deny | ask
+.fi
+.RE
+Most constrained matching rule wins; otherwise the default applies.
+.TP
+.I ~/.local/share/crabwall/events.db
+SQLite log of all decisions (rotated at ~50k rows).
+.SH PRIVILEGES
+Needs root (or CAP_NET_ADMIN + CAP_SYS_RESOURCE + CAP_DAC_READ_SEARCH)
+for nftables, NFQUEUE, the packet sniffer and eBPF. Without them the
+daemon runs in dry-run log-only mode.
+.SH "EXIT STATUS"
+Runs until terminated.
+.SH "SEE ALSO"
+.BR crabwall (1),
+.BR nft (8)
+.SH AUTHORS
+crabwall contributors.

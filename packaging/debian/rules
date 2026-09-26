@@ -1,0 +1,24 @@
+#!/usr/bin/make -f
+# debhelper build for crabwall. Release builds of both binaries;
+# the eBPF object is optional (needs nightly, ships separately).
+
+export CARGO_TARGET_DIR = $(CURDIR)/target
+export CARGO_HOME = $(CURDIR)/.cargo-home
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	cargo build --release --locked -p crabwalld -p crabwall
+
+override_dh_auto_test:
+	cargo test --release --locked --workspace --exclude crabwall-ebpf
+
+override_dh_auto_install:
+	install -Dm0755 target/release/crabwalld debian/crabwalld/usr/bin/crabwalld
+	install -Dm0755 target/release/crabwall debian/crabwall/usr/bin/crabwall
+	install -Dm0644 man/crabwall.1 debian/crabwall/usr/share/man/man1/crabwall.1
+	install -Dm0644 man/crabwalld.8 debian/crabwalld/usr/share/man/man8/crabwalld.8
+
+override_dh_auto_clean:
+	rm -rf target .cargo-home

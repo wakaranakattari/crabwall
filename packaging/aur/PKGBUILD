@@ -1,0 +1,41 @@
+# Maintainer: wakaranakattari <wakaranakattari@gmail.com>
+pkgname=crabwall-git
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Little Snitch for Linux: per-app firewall prompts (Rust, eBPF, nftables)"
+arch=('x86_64' 'aarch64')
+url="https://github.com/wakaranakattari/crabwall"
+license=('MIT')
+depends=('glibc' 'gcc-libs' 'nftables')
+makedepends=('git' 'cargo' 'clang' 'llvm')
+provides=('crabwall')
+conflicts=('crabwall')
+source=("git+https://github.com/wakaranakattari/crabwall.git")
+sha256sums=('SKIP')
+
+pkgver() {
+	cd "$srcdir/crabwall"
+	git describe --long --tags 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' \
+		|| echo "1.0.0.r0.g$(git rev-parse --short HEAD)"
+}
+
+build() {
+	cd "$srcdir/crabwall"
+	export CARGO_TARGET_DIR="$srcdir/target"
+	cargo build --release --locked -p crabwalld -p crabwall
+}
+
+check() {
+	cd "$srcdir/crabwall"
+	export CARGO_TARGET_DIR="$srcdir/target"
+	cargo test --release --locked --workspace --exclude crabwall-ebpf
+}
+
+package() {
+	cd "$srcdir/crabwall"
+	install -Dm0755 "target/release/crabwalld" "$pkgdir/usr/bin/crabwalld"
+	install -Dm0755 "target/release/crabwall" "$pkgdir/usr/bin/crabwall"
+	install -Dm0644 "packaging/systemd/crabwalld.service" "$pkgdir/usr/lib/systemd/system/crabwalld.service"
+	install -Dm0644 "man/crabwall.1" "$pkgdir/usr/share/man/man1/crabwall.1"
+	install -Dm0644 "man/crabwalld.8" "$pkgdir/usr/share/man/man8/crabwalld.8"
+}

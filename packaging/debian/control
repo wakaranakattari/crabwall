@@ -1,0 +1,23 @@
+Source: crabwall
+Section: net
+Priority: optional
+Maintainer: wakaranakattari <wakaranakattari@gmail.com>
+Build-Depends: debhelper-compat (= 13), cargo (>= 1.75), rustc (>= 1.75), pkg-config
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+Homepage: https://github.com/wakaranakattari/crabwall
+
+Package: crabwalld
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, nftables
+Description: per-app firewall daemon for Linux
+ crabwalld watches outbound connections and enforces per-application
+ firewall rules via nftables (with NFQUEUE first-packet hold when
+ available). It prompts through the crabwall TUI for unknown traffic.
+
+Package: crabwall
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: per-app firewall TUI and CLI for Linux
+ Live connection feed, one-key allow/deny prompts, rule and log
+ management for the crabwalld daemon.

@@ -1,0 +1,100 @@
+.TH CRABWALL 1 "September 2026" "crabwall 1.0.0" "User Commands"
+.SH NAME
+crabwall \- per-app firewall TUI and CLI for Linux
+.SH SYNOPSIS
+.B crabwall
+[\fICOMMAND\fR]
+.SH DESCRIPTION
+.B crabwall
+is the user frontend of the crabwall firewall. Without arguments it opens
+the live TUI: a connection feed with one-key prompts. The daemon
+.BR crabwalld (8)
+must be running, otherwise the TUI shows demo data.
+.SH COMMANDS
+.TP
+.BI "tui [--theme " NAME "] [--icons " plain | nerd "]"
+Launch the live TUI (default when no command is given). Themes: phosphor
+(default), gruvbox, dracula, nord, tokyo, catppuccin, mono. Also settable
+via CRABWALL_THEME / CRABWALL_ICONS.
+.TP
+.BI "up [--theme " NAME "] [--icons " SET "] [--learn " SECS "] [--default " ask | allow | deny "]"
+Start the daemon if needed and open the TUI. One command, one env: both
+sides resolve the same socket/rules/db, so paths can never diverge.
+Stops its daemon on exit; see
+.B down
+for orphans.
+.TP
+.B down
+Stop a daemon previously started by
+.BR up .
+.TP
+.B status
+Check whether
+.B crabwalld
+is reachable and print its IPC version and default policy.
+.TP
+.BI "logs [--limit " N "] [--json]"
+Show recent connections from the event log (default 20, newest first).
+.TP
+.BI "allow --app " APP " [--domain " D "] [--port " P "]"
+Append an allow rule.
+.TP
+.BI "deny --app " APP " [--domain " D "] [--port " P "]"
+Append a deny rule.
+.TP
+.B rules
+Print the current rules file.
+.TP
+.B config [show]
+Show effective settings and where each comes from (flag, file, env, default).
+.TP
+.BI "config set " "theme " id "| icons " plain | nerd
+Persist a setting to
+.I ~/.config/crabwall/config.toml .
+The TUI also saves the theme/icons on exit when changed with
+.B t
+/
+.B i .
+.SH "TUI KEYS"
+.TP
+.B y / Y
+Allow once / always (persist to rules file).
+.TP
+.B n / N
+Deny once / always.
+.TP
+.B s
+Allow until daemon restart (session).
+.TP
+.B Up / Down , j / k
+Select connection.
+.TP
+.B Tab
+Switch feed / rules tabs.
+.TP
+.B t / i
+Cycle color theme / toggle plain/nerd icons.
+.TP
+.B q / Esc
+Quit.
+.SH FILES
+.TP
+.I ~/.config/crabwall/rules.toml
+Firewall rules (TOML). See
+.BR crabwalld (8)
+for the format.
+.TP
+.I ~/.local/share/crabwall/events.db
+SQLite connection log.
+.SH ENVIRONMENT
+.TP
+.B CRABWALL_SOCK
+Unix socket path (default /run/crabwall.sock for root,
+$XDG_RUNTIME_DIR/crabwall.sock otherwise).
+.TP
+.B CRABWALL_RULES , CRABWALL_DB
+Override the rules file and log database paths.
+.SH "SEE ALSO"
+.BR crabwalld (8)
+.SH AUTHORS
+crabwall contributors.
