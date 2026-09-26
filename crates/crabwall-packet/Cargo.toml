@@ -1,0 +1,11 @@
+[package]
+name = "crabwall-packet"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pure packet-parsing primitives for crabwall: DNS, TLS SNI, IP frames"
+
+[features]
+test-util = []
+
+[dependencies]
