@@ -1,0 +1,24 @@
+[package]
+name = "crabwall-fuzz"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+crabwall-packet = { path = "../crates/crabwall-packet" }
+
+[[bin]]
+name = "dns"
+path = "fuzz_targets/dns.rs"
+
+[[bin]]
+name = "sni"
+path = "fuzz_targets/sni.rs"
+
+[[bin]]
+name = "frame"
+path = "fuzz_targets/frame.rs"
