@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+# OpenRC service for crabwalld.
+# Install: cp crabwalld /etc/init.d/crabwalld && chmod +x /etc/init.d/crabwalld
+#          rc-update add crabwalld default && rc-service crabwalld start
+
+name="crabwall daemon"
+description="crabwall per-app firewall daemon"
+
+command="/usr/local/bin/crabwalld"
+command_args=""
+pidfile="/run/crabwalld.pid"
+command_background="yes"
+
+# Env overrides: uncomment to set a default policy for unmatched traffic.
+# export CRABWALL_DEFAULT="ask"
+# export CRABWALL_PTR="0"
+
+depend() {
+	need net
+	after firewall
+}

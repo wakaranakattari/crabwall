@@ -1,0 +1,15 @@
+[Unit]
+Description=crabwall daemon - per-app Linux firewall
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/crabwalld
+Restart=on-failure
+# Needs net_admin for nftables + sys_resource for eBPF (v0.2).
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_SYS_RESOURCE CAP_DAC_READ_SEARCH
+AmbientCapabilities=CAP_NET_ADMIN CAP_SYS_RESOURCE CAP_DAC_READ_SEARCH
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target

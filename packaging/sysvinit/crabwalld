@@ -1,0 +1,49 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          crabwalld
+# Required-Start:    $network
+# Required-Stop:     $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: crabwall per-app firewall daemon
+### END INIT INFO
+# SysVinit (LSB) fallback for crabwalld.
+# Install: cp crabwalld /etc/init.d/crabwalld && chmod +x /etc/init.d/crabwalld
+#          update-rc.d crabwalld defaults   # debian/ubuntu
+#          # or: chkconfig --add crabwalld  # rhel/void(-glibc alt)
+
+DAEMON=/usr/local/bin/crabwalld
+NAME=crabwalld
+PIDFILE=/run/crabwalld.pid
+
+case "$1" in
+start)
+	echo "Starting $NAME..."
+	start-stop-daemon --start --quiet --background --make-pidfile \
+		--pidfile "$PIDFILE" --exec "$DAEMON"
+	;;
+stop)
+	echo "Stopping $NAME..."
+	# No --exec here: $DAEMON may be a wrapper script (exe would be /bin/sh).
+	start-stop-daemon --stop --quiet --pidfile "$PIDFILE" --retry 5 \
+		|| true
+	rm -f "$PIDFILE"
+	;;
+restart)
+	"$0" stop
+	sleep 1
+	"$0" start
+	;;
+status)
+	if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+		echo "$NAME is running."
+	else
+		echo "$NAME is not running."
+	fi
+	;;
+*)
+	echo "Usage: $0 {start|stop|restart|status}" >&2
+	exit 3
+	;;
+esac
+exit 0

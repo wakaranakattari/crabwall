@@ -1,0 +1,9 @@
+#!/bin/sh
+# runit service for crabwalld.
+# Install: mkdir -p /etc/sv/crabwalld/log && cp run /etc/sv/crabwalld/run
+#          cp log-run /etc/sv/crabwalld/log/run
+#          ln -s /etc/sv/crabwalld /run/runit/service/crabwalld
+# Env overrides (optional): chpst -e /etc/crabwalld/env -- crabwalld
+#   echo "deny" > /etc/crabwalld/env/CRABWALL_DEFAULT
+exec 2>&1
+exec crabwalld

@@ -1,0 +1,6 @@
+#!/bin/sh
+# s6 longrun service for crabwalld.
+# Install: cp -r crabwalld /etc/s6/sv/crabwalld
+#          (s6-svscan picks it up from your scandir automatically)
+# Env overrides (optional): s6-envdir /etc/crabwalld/env
+exec crabwalld

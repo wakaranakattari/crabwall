@@ -1,0 +1,4 @@
+#!/bin/sh
+# runit log service for crabwalld (svlogd).
+# Install alongside ../run, see comments there.
+exec svlogd -tt /var/log/crabwalld
