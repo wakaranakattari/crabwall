@@ -10,4 +10,4 @@ path = "src/main.rs"
 
 [dependencies]
 anyhow.workspace = true
-crabwall-packet = { path = "../crates/crabwall-packet", features = ["test-util"] }
+crabwall-packet = { version = "1.0.0", path = "../crates/crabwall-packet", features = ["test-util"] }

@@ -10,7 +10,7 @@ name = "crabwalld"
 path = "src/main.rs"
 
 [dependencies]
-crabwall-common = { path = "../crabwall-common" }
+crabwall-common = { version = "1.0.0", path = "../crabwall-common" }
 crabwall-packet.workspace = true
 anyhow.workspace = true
 libc.workspace = true
@@ -29,4 +29,4 @@ dns-lookup = "2"
 bytes = "1"
 
 [dev-dependencies]
-crabwall-packet = { path = "../crabwall-packet", features = ["test-util"] }
+crabwall-packet = { version = "1.0.0", path = "../crabwall-packet", features = ["test-util"] }

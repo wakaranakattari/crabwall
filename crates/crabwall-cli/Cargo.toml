@@ -10,7 +10,7 @@ name = "crabwall"
 path = "src/main.rs"
 
 [dependencies]
-crabwall-common = { path = "../crabwall-common" }
+crabwall-common = { version = "1.0.0", path = "../crabwall-common" }
 anyhow.workspace = true
 serde.workspace = true
 serde_json.workspace = true

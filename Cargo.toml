@@ -42,4 +42,4 @@ directories = "5"
 chrono = { version = "0.4", features = ["serde"] }
 notify-rust = "4"
 uuid = { version = "1", features = ["v4"] }
-crabwall-packet = { path = "crates/crabwall-packet" }
+crabwall-packet = { version = "1.0.0", path = "crates/crabwall-packet" }
