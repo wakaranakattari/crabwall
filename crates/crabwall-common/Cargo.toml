@@ -3,6 +3,7 @@ name = "crabwall-common"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Shared rules engine and IPC protocol for the crabwall firewall"
 
 [dependencies]
 serde.workspace = true

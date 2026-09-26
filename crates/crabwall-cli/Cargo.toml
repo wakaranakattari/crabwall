@@ -3,6 +3,7 @@ name = "crabwall"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+description = "Little Snitch for Linux: per-app firewall TUI and CLI"
 
 [[bin]]
 name = "crabwall"
