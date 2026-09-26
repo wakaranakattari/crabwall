@@ -1,0 +1,24 @@
+# build outputs
+target/
+fuzz/target/
+
+# fuzz artifacts (corpora are kept, crashes excluded by default in CI)
+fuzz/corpus/
+fuzz/artifacts/
+
+# editors and OS noise
+.idea/
+.vscode/
+.lsp/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# local env and logs
+.env
+*.log
+
+# packaging scratch output
+*.pkg.tar.zst
+*.deb

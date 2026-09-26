@@ -1,0 +1,45 @@
+[workspace]
+resolver = "2"
+members = [
+  "crates/crabwall-common",
+  "crates/crabwall-packet",
+  "crates/crabwalld",
+  "crates/crabwall-cli",
+  "crates/crabwall-ebpf",
+  "xtask",
+]
+# The eBPF program needs nightly + bpf-linker; host toolchains skip it
+# unless asked explicitly (`-p crabwall-ebpf`, `cargo xtask build-ebpf`).
+default-members = [
+  "crates/crabwall-common",
+  "crates/crabwall-packet",
+  "crates/crabwalld",
+  "crates/crabwall-cli",
+  "xtask",
+]
+# cargo-fuzz owns its own workspace and rustflags; keep it out.
+exclude = ["fuzz"]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+license = "MIT"
+
+[workspace.dependencies]
+anyhow = "1"
+libc = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+clap = { version = "4", features = ["derive"] }
+ratatui = "0.29"
+crossterm = "0.28"
+rusqlite = { version = "0.32", features = ["bundled"] }
+toml = "0.8"
+directories = "5"
+chrono = { version = "0.4", features = ["serde"] }
+notify-rust = "4"
+uuid = { version = "1", features = ["v4"] }
+crabwall-packet = { path = "crates/crabwall-packet" }
