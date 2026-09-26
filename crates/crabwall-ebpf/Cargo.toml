@@ -1,0 +1,15 @@
+# eBPF program crate: binary layout + bpf-linker (see `cargo xtask build-ebpf`).
+# Member of the workspace but NOT of default-members: host toolchains
+# (stable clippy/test) skip it; the ebpf CI job builds it explicitly.
+[package]
+name = "crabwall-ebpf"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "crabwall-ebpf"
+path = "src/main.rs"
+
+[dependencies]
+aya-ebpf = "0.1"
